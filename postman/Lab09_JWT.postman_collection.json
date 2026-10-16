@@ -1,0 +1,84 @@
+{
+  "info": {
+    "name": "Lab09 JWT - demo_Security_JWT",
+    "description": "Coleccion generada a partir del docx GLAB-S09. Importar en Postman: Import > File > este JSON.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "adminToken", "value": "" },
+    { "key": "userToken", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "1. SIGNUP ADMIN",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/auth/signup",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n   \"username\": \"admin\",\n   \"email\": \"admin@test.com\",\n   \"password\": \"123456\",\n   \"roles\": [\"ADMIN\"]\n}"
+        }
+      }
+    },
+    {
+      "name": "2. SIGNUP USER NORMAL",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/auth/signup",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n   \"username\": \"user1\",\n   \"email\": \"user@test.com\",\n   \"password\": \"123456\",\n   \"roles\": [\"USER\"]\n}"
+        }
+      }
+    },
+    {
+      "name": "3. LOGIN ADMIN (signin)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/auth/signin",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n   \"email\": \"admin@test.com\",\n   \"password\": \"123456\"\n}"
+        }
+      }
+    },
+    {
+      "name": "4. RUTA PROTEGIDA ADMIN",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/test/admin",
+        "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }]
+      }
+    },
+    {
+      "name": "5. LOGIN USER NORMAL (signin)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/auth/signin",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n   \"email\": \"user@test.com\",\n   \"password\": \"123456\"\n}"
+        }
+      }
+    },
+    {
+      "name": "6. RUTA PROTEGIDA USER",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/test/user",
+        "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{userToken}}", "type": "string" }] },
+        "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }]
+      }
+    },
+    {
+      "name": "EXTRA. RUTA PUBLICA",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/test/all" }
+    }
+  ]
+}

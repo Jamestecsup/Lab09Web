@@ -1,0 +1,95 @@
+TEXTOS PARA PEGAR EN POSTMAN - Lab09 JWT
+============================================
+Base: http://localhost:8080
+Importa tambien: postman/Lab09_JWT.postman_collection.json
+
+------------------------------------------------
+[PRUEBA 1] SIGNUP ADMIN - REGISTRO
+Metodo: POST
+URL: http://localhost:8080/api/auth/signup
+Tab Body > raw > JSON, pega esto:
+------------------------------------------------
+{
+   "username": "admin",
+   "email": "admin@test.com",
+   "password": "123456",
+   "roles": ["ADMIN"]
+}
+Respuesta esperada:
+{
+   "message": "Usuario registrado correctamente"
+}
+
+------------------------------------------------
+[PRUEBA 2] SIGNUP USER NORMAL
+Metodo: POST
+URL: http://localhost:8080/api/auth/signup
+Tab Body > raw > JSON, pega esto:
+------------------------------------------------
+{
+   "username": "user1",
+   "email": "user@test.com",
+   "password": "123456",
+   "roles": ["USER"]
+}
+
+------------------------------------------------
+[PRUEBA 3] LOGIN ADMIN - OBTENER JWT
+Metodo: POST
+URL: http://localhost:8080/api/auth/signin
+Tab Body > raw > JSON, pega esto:
+------------------------------------------------
+{
+   "email": "admin@test.com",
+   "password": "123456"
+}
+Respuesta esperada (ejemplo, tu token sera distinto):
+{
+    "id": 1,
+    "username": "admin@test.com",
+    "email": "admin@test.com",
+    "roles": ["ROLE_ADMIN"],
+    "accessToken": "eyJhbGciOiJIUzI1NiJ9...",
+    "tokenType": "Bearer"
+}
+>> COPIA el valor de "accessToken" y guardalo como adminToken.
+
+------------------------------------------------
+[PRUEBA 4] RUTA PROTEGIDA ADMIN
+Metodo: GET
+URL: http://localhost:8080/api/test/admin
+Tab Authorization > Type: Bearer Token > Token: <pega adminToken>
+Equivalente en Headers:
+  Authorization: Bearer <pega adminToken>
+Respuesta esperada:
+  Admin Content
+
+------------------------------------------------
+[PRUEBA 5] LOGIN USER NORMAL - OBTENER JWT
+Metodo: POST
+URL: http://localhost:8080/api/auth/signin
+Tab Body > raw > JSON, pega esto:
+------------------------------------------------
+{
+   "email": "user@test.com",
+   "password": "123456"
+}
+>> COPIA el valor de "accessToken" y guardalo como userToken.
+
+------------------------------------------------
+[PRUEBA 6] RUTA PROTEGIDA USER
+Metodo: GET
+URL: http://localhost:8080/api/test/user
+Tab Authorization > Type: Bearer Token > Token: <pega userToken>
+Equivalente en Headers:
+  Authorization: Bearer <pega userToken>
+Respuesta esperada:
+  User Content
+
+------------------------------------------------
+[EXTRA] RUTA PUBLICA (sin token)
+Metodo: GET
+URL: http://localhost:8080/api/test/all
+Respuesta: Public Content
+------------------------------------------------
+NOTA: Si cambiaste el puerto o usas variables, usa {{baseUrl}}, {{adminToken}}, {{userToken}}.

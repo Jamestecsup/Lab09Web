@@ -1,0 +1,80 @@
+TEXTOS POSTMAN - ACTIVIDAD DE ANALISIS (Casos 1-6)
+==================================================
+Requisito: server corriendo + MySQL XAMPP con Start.
+Si un token vencio (1 hora), repite el signin y copia el nuevo accessToken.
+Guarda cada captura en imagenes_postman/ con el nombre indicado.
+
+------------------------------------------------
+CASO 1: RUTA PUBLICA (sin token)
+Metodo: GET
+URL: http://localhost:8080/api/test/all
+Auth: ninguna (pestana Authorization > No Auth).
+Esperado: 200 OK + Body: Public Content
+Guardar como: imagenes_postman/c1_ruta_publica.png
+
+------------------------------------------------
+CASO 2: ACCESO SIN TOKEN
+Metodo: GET
+URL: http://localhost:8080/api/test/user
+Auth: ninguna (No Auth, sin header Authorization).
+Esperado: 403 Forbidden + body vacio
+Guardar como: imagenes_postman/c2_sin_token.png
+
+------------------------------------------------
+CASO 3: TOKEN INVALIDO (modificado a mano)
+Paso previo: POST http://localhost:8080/api/auth/signin
+Body (raw JSON):
+{
+   "email": "user@test.com",
+   "password": "123456"
+}
+Copia el accessToken y CAMBIA las ultimas 5 letras por otras
+(ej: ...abc12 -> ...XXXXX). Ese es tu "token invalido".
+Metodo: GET
+URL: http://localhost:8080/api/test/user
+Auth: Bearer Token > pega el token MODIFICADO.
+Esperado: 403 Forbidden + body vacio
+(En consola del server sale: JWT invalido: ...)
+Guardar como: imagenes_postman/c3_token_invalido.png
+
+------------------------------------------------
+CASO 4: ACCESO CON TOKEN VALIDO
+Paso previo: POST http://localhost:8080/api/auth/signin
+Body (raw JSON):
+{
+   "email": "user@test.com",
+   "password": "123456"
+}
+Copia el accessToken TAL CUAL (sin modificar).
+Metodo: GET
+URL: http://localhost:8080/api/test/user
+Auth: Bearer Token > pega el token valido de user.
+Esperado: 200 OK + Body: User Content
+Guardar como: imagenes_postman/c4_token_valido.png
+
+------------------------------------------------
+CASO 5: RUTA ADMIN SIN PERMISOS (token USER)
+Usa el accessToken de user@test.com (del Caso 4, rol ROLE_USER).
+Metodo: GET
+URL: http://localhost:8080/api/test/admin
+Auth: Bearer Token > pega el token de USER.
+Esperado: 403 Forbidden + body vacio
+(autenticado OK, pero sin rol ADMIN)
+Guardar como: imagenes_postman/c5_admin_sin_permiso.png
+
+------------------------------------------------
+CASO 6: RUTA ADMIN CON PERMISOS (token ADMIN)
+Paso previo: POST http://localhost:8080/api/auth/signin
+Body (raw JSON):
+{
+   "email": "admin@test.com",
+   "password": "123456"
+}
+Copia el accessToken (rol ROLE_ADMIN).
+Metodo: GET
+URL: http://localhost:8080/api/test/admin
+Auth: Bearer Token > pega el token de ADMIN.
+Esperado: 200 OK + Body: Admin Content
+Guardar como: imagenes_postman/c6_admin_con_permiso.png
+------------------------------------------------
+AVISAME cuando esten las 6 y las pego debajo de cada caso en el RESUELTO.

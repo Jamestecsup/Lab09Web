@@ -1,0 +1,14 @@
+# Build
+demo_Security_JWT/target/
+out/
+
+# IDE local (rutas absolutas del SDK)
+.idea/
+*.iml
+
+# Medios extraidos del docx (regenerables)
+docx_media/
+
+# OS
+Thumbs.db
+.DS_Store
